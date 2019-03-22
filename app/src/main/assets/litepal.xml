@@ -1,0 +1,10 @@
+<?xml version ="1.0" encoding ="utf-8"?>
+<litepal>
+    <dbname value="location"/>
+    <version value="1"/>
+    <list>
+        <mapping class="com.xiaogege.jerry.model.database.City"/>
+        <mapping class="com.xiaogege.jerry.model.database.County"/>
+        <mapping class="com.xiaogege.jerry.model.database.Province"/>
+    </list>
+</litepal>
