@@ -19,7 +19,6 @@ public class PresenterContract {
     }
 
     public interface WeatherActivityPresenter extends BasePresenter<ViewContract.WeatherActivityView>{
-        void checkStatus();
         void queryAll();
         void refresh();
     }

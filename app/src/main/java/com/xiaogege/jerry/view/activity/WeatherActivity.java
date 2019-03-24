@@ -25,6 +25,7 @@ import com.xiaogege.jerry.model.xml.Forecast;
 import com.xiaogege.jerry.model.xml.Now;
 import com.xiaogege.jerry.model.xml.Suggestion;
 import com.xiaogege.jerry.presenter.WeatherActivityPresenterImpl;
+import com.xiaogege.jerry.util.LogUtils;
 import com.xiaogege.jerry.util.ToastUtils;
 import com.xiaogege.jerry.view.ViewContract;
 
@@ -37,6 +38,7 @@ import static com.xiaogege.jerry.model.Constants.INTENT_PARAM_NAME;
 
 public class WeatherActivity extends AppCompatActivity implements ViewContract.WeatherActivityView {
 
+    private static final String TAG = "WeatherActivity";
     @BindView (R.id.bing_pic_img)
     ImageView mBackgroundImage;
 
@@ -102,11 +104,9 @@ public class WeatherActivity extends AppCompatActivity implements ViewContract.W
         ButterKnife.bind (this);
         mWeatherActivityPresenter = new WeatherActivityPresenterImpl (this);
 
-        mWeatherActivityPresenter.checkStatus ();
-
         //拿到传来的城市代码
-        String Location = (String) getIntent ().getSerializableExtra (INTENT_PARAM_NAME);
-        mWeatherActivityPresenter.setLocation (Location);
+        String location = (String) getIntent ().getSerializableExtra (INTENT_PARAM_NAME);
+        mWeatherActivityPresenter.setLocation (location);
         mWeatherActivityPresenter.attach (this);
 
         //监听刷新

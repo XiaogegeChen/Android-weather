@@ -1,13 +1,16 @@
 package com.xiaogege.jerry.model;
 
 public class Constants {
+
+    private Constants(){
+    }
+
     /**
      * intent 参数的key
      */
     public static final String INTENT_PARAM_NAME = "intent_param_name";
 
-    public static final String IS_JUMP = "is_jump";
-    public static final String IS_JUMP_VALUE = "jump";
+    public static final String SELECTED_LOCATION_KEY = "selected_location_key";
 
     /**
      * 加载天气时显示的信息

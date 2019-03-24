@@ -22,6 +22,7 @@ import com.xiaogege.jerry.model.database.Province;
 import com.xiaogege.jerry.presenter.WeatherFragmentPresenterImpl;
 import com.xiaogege.jerry.util.LogUtils;
 import com.xiaogege.jerry.util.ToastUtils;
+import com.xiaogege.jerry.util.XmlIOUtils;
 import com.xiaogege.jerry.view.ViewContract;
 import com.xiaogege.jerry.view.activity.MainActivity;
 import com.xiaogege.jerry.view.activity.WeatherActivity;
@@ -40,6 +41,7 @@ import io.reactivex.functions.Predicate;
 import static com.xiaogege.jerry.model.Constants.ERROR_MESSAGE;
 import static com.xiaogege.jerry.model.Constants.PROGRESS_MESSAGE;
 import static com.xiaogege.jerry.model.Constants.PROVINCE_LIST_TITLE;
+import static com.xiaogege.jerry.model.Constants.SELECTED_LOCATION_KEY;
 
 public class WeatherFragment extends Fragment implements ViewContract.WeatherFragmentView {
 
@@ -124,6 +126,9 @@ public class WeatherFragment extends Fragment implements ViewContract.WeatherFra
                             String weatherId = mSelectedCounty.getWeatherId ();
                             LogUtils.d (TAG, mSelectedCounty.getCountyName ()+mSelectedCounty.getWeatherId ());
 
+                            //将拿到的城市代码存储
+                            XmlIOUtils.xmlPut (SELECTED_LOCATION_KEY, weatherId, getContext ());
+
                             // 在MainActivity就跳转,在WeatherActivity就调WeatherActivity中的方法
                             if(getActivity () instanceof MainActivity){
                                 WeatherActivity.start (getContext (), WeatherActivity.class, weatherId);
@@ -166,6 +171,7 @@ public class WeatherFragment extends Fragment implements ViewContract.WeatherFra
                         refreshList ();
                         mCurrentLevel = LEVEL_PROVINCE;
                         mArea.setText (PROVINCE_LIST_TITLE);
+                        mBack.setVisibility (View.INVISIBLE);
                         break;
                     default:
                         break;

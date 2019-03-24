@@ -36,8 +36,6 @@ import io.reactivex.schedulers.Schedulers;
 import static com.xiaogege.jerry.model.Constants.AQI_ERROR_MESSAGE;
 import static com.xiaogege.jerry.model.Constants.FORECAST_ERROR_MESSAGE;
 import static com.xiaogege.jerry.model.Constants.IMAGE_ERROR_MESSAGE;
-import static com.xiaogege.jerry.model.Constants.IS_JUMP;
-import static com.xiaogege.jerry.model.Constants.IS_JUMP_VALUE;
 import static com.xiaogege.jerry.model.Constants.NOW_ERROR_MESSAGE;
 import static com.xiaogege.jerry.model.Constants.SUGGESTION_ERROR_MESSAGE;
 import static com.xiaogege.jerry.model.Constants.WEATHER_STATUE_SUCCESS;
@@ -97,14 +95,6 @@ public class WeatherActivityPresenterImpl implements PresenterContract.WeatherAc
         queryForecast (QueryDataHelper.Type.REFRESH);
         querySuggestion (QueryDataHelper.Type.REFRESH);
         queryImage(QueryDataHelper.Type.REFRESH);
-    }
-
-    @Override
-    public void checkStatus(){
-        String isJump = XmlIOUtils.xmlGet (IS_JUMP, mContext);
-        if(isJump == null){
-            XmlIOUtils.xmlPut (IS_JUMP, IS_JUMP_VALUE, mContext);
-        }
     }
 
     @SuppressLint("CheckResult")
@@ -272,11 +262,18 @@ public class WeatherActivityPresenterImpl implements PresenterContract.WeatherAc
                             String location = now.getHeWeather6 ().get (0).getBasic ().getLocation ();
                             String temperature = now.getHeWeather6 ().get (0).getNow ().getTmp ();
                             String condition = now.getHeWeather6 ().get (0).getNow ().getCond_txt ();
-                            com.xiaogege.jerry.model.xml.Now xmlNow = new com.xiaogege.jerry.model.xml.Now (time, location, temperature, condition);
+                            final com.xiaogege.jerry.model.xml.Now xmlNow = new com.xiaogege.jerry.model.xml.Now (time, location, temperature, condition);
                             //写入sharePreference
                             String nowJson = new Gson ().toJson (xmlNow);
                             XmlIOUtils.xmlPut (NOW_JSON_KEY, nowJson, mContext);
-                            return Observable.just (xmlNow);
+                            return Observable.create (new ObservableOnSubscribe<com.xiaogege.jerry.model.xml.Now> () {
+                                @Override
+                                public void subscribe(ObservableEmitter<com.xiaogege.jerry.model.xml.Now> emitter) throws Exception {
+                                    LogUtils.d (TAG, "queryFromNet: Now");
+                                    emitter.onNext (xmlNow);
+                                    emitter.onComplete ();
+                                }
+                            });
                         }
                     });
         }
@@ -289,6 +286,7 @@ public class WeatherActivityPresenterImpl implements PresenterContract.WeatherAc
                 @Override
                 public void subscribe(ObservableEmitter<com.xiaogege.jerry.model.xml.Now> emitter) throws Exception {
                     if(nowJson != null){
+                        LogUtils.d (TAG, "queryFromLocal: Now");
                         com.xiaogege.jerry.model.xml.Now now = new Gson ().fromJson (nowJson, com.xiaogege.jerry.model.xml.Now.class);
                         emitter.onNext (now);
                     }

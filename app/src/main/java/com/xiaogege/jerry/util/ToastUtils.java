@@ -5,6 +5,9 @@ import android.widget.Toast;
 
 public class ToastUtils {
 
+    private ToastUtils(){
+    }
+
     private static Toast sToast;
 
     public static void showToast(Context context, String message){

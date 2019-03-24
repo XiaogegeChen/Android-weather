@@ -4,12 +4,11 @@ import android.graphics.Color;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
 
 import com.xiaogege.jerry.R;
 import com.xiaogege.jerry.util.XmlIOUtils;
 
-import static com.xiaogege.jerry.model.Constants.IS_JUMP;
+import static com.xiaogege.jerry.model.Constants.SELECTED_LOCATION_KEY;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,9 +22,10 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView (R.layout.activity_main);
 
-        String isJump = XmlIOUtils.xmlGet (IS_JUMP, this);
-        if(isJump != null){
-            WeatherActivity.start (this, WeatherActivity.class, null);
+        //拿到保存的城市代码,并传递给weatherActivity
+        String selectedLocation = XmlIOUtils.xmlGet (SELECTED_LOCATION_KEY, this);
+        if(selectedLocation != null){
+            WeatherActivity.start (this, WeatherActivity.class, selectedLocation);
             finish ();
         }
     }
